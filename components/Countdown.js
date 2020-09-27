@@ -1,19 +1,29 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import CountDown from 'react-native-countdown-component';
 
-export default function Countdown({running}) {
+export default function Countdown({running, startingTime}) {
+  const [restartingCountDown, setRestartCountDown] = useState(false);
+  useEffect(() => {
+    setRestartCountDown(true);
+    setTimeout(() => {
+      setRestartCountDown(false);
+    });
+  }, [startingTime]);
+
   return (
     <View style={styles.container}>
-      <CountDown
-        until={60 * 2 + 10}
-        digitStyle={styles.digitStyle}
-        timeToShow={['H', 'M', 'S']}
-        onFinish={() => alert('finished')}
-        onPress={() => alert('hello')}
-        size={18}
-        running={running}
-      />
+      {restartingCountDown ? null : (
+        <CountDown
+          until={startingTime}
+          digitStyle={styles.digitStyle}
+          timeToShow={['H', 'M', 'S']}
+          onFinish={() => alert('finished')}
+          onPress={() => alert('hello')}
+          size={18}
+          running={running}
+        />
+      )}
       <View style={styles.switch}>
         <Image
           source={require('../assets/alarm-clock.png')}

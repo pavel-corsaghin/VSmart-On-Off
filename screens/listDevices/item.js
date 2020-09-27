@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,20 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import CountDown from 'react-native-countdown-component';
 import Button from '../../components/Button';
 import Countdown from '../../components/Countdown';
 
 export default function Item({item}) {
   const [running, setRunning] = useState(false);
+  const [startTime, setStartTime] = useState(60);
+
+  const onStartPress = useCallback(() => {
+    setRunning(true);
+    // Đây là thầy fake 1 action để thay đổi thời gian, khi em có picker rồi thì chỉ cần dùng setStartTime thôi
+    setTimeout(() => {
+      setStartTime(20);
+    }, 5000);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -20,8 +28,8 @@ export default function Item({item}) {
         <Text style={styles.title}>{item.title}</Text>
         <Image source={item.image1} style={styles.image1} />
       </View>
-      <Countdown running={running} />
-      <Button onPress={() => setRunning(true)} title="Bắt đầu" />
+      <Countdown running={running} startingTime={startTime} />
+      <Button onPress={onStartPress} title="Bắt đầu" />
       <TouchableOpacity onPress={() => setRunning(false)} style={styles.image}>
         <Image source={item.image} style={styles.image} />
       </TouchableOpacity>
